@@ -1,0 +1,8 @@
+	flask==1.0.2
+	flask_pymongo==2.2
+	beautifulsoup4==4.6.0
+	six==1.11.0
+	gunicorn==19.9.0
+	requests==2.20.0
+    Flask-SQLAlchemy==2.3.2
+    pandas==0.23.0

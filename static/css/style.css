@@ -1,0 +1,42 @@
+#bg {
+    position: fixed; 
+    top: -50%; 
+    left: -50%; 
+    width: 200%; 
+    height: 200%;
+  }
+  #bg img {
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0; 
+    margin: auto; 
+    min-width: 50%;
+    min-height: 50%;
+  }
+  
+  @media screen and (max-width: 1024px) { /* Specific to this particular image */
+    img.bg {
+      left: 50%;
+      margin-left: -512px;   /* 50% */
+    }
+  }
+
+  .navbar .container .navbar-brand {
+    color: rgb(240, 8, 8) !important;
+    font-size: 18px;
+    font-family: impact;
+}
+
+  .navbar .container .navbar-nav li a{
+    color: rgb(8, 7, 7) !important;
+    font-size: 18px;
+    font-family: impact;
+}
+
+.navbar-default {
+  background-color:rgb(178, 182, 240);
+  background-image: none;
+  background-repeat: no-repeat;
+ }
