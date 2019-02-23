@@ -1,8 +1,25 @@
-	flask==1.0.2
-	flask_pymongo==2.2
-	beautifulsoup4==4.6.0
-	six==1.11.0
-	gunicorn==19.9.0
-	requests==2.20.0
-    Flask-SQLAlchemy==2.3.2
-    pandas==0.23.0
+flask==1.0.2
+flask_pymongo==2.2
+beautifulsoup4==4.6.0
+six==1.11.0
+gunicorn==19.9.0
+requests==2.20.0
+Flask-SQLAlchemy==2.3.2
+pandas==0.23.0
+pyspark==2.4.0
+py4j==0.10.7
+keras==2.2.4
+keras-applications==1.0.7
+keras-preprocessing==1.0.9
+absl-py==0.7.0
+astor==0.7.1
+gast==0.2.2
+grpcio==1.18.0
+markdown==3.0.1
+mock==2.0.0
+pbr==5.1.2
+protobuf==3.6.1
+tensorboard==1.12.2
+tensorflow==1.13.0rc2
+tensorflow-estimator==1.13.0
+termcolor==1.1.0

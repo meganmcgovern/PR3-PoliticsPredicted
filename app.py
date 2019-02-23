@@ -1,9 +1,6 @@
 import os
 
 import pandas as pd
-import keras
-from keras.preprocessing import image
-from keras import backend as K
 
 import pandas as pd
 import numpy as np
@@ -15,18 +12,50 @@ from sqlalchemy import create_engine
 
 from flask import Flask, jsonify, render_template, request
 from flask_sqlalchemy import SQLAlchemy
+from pyspark.sql import SparkSession
+from pyspark import SparkFiles
+spark = SparkSession.builder.appName('prez').getOrCreate()
+from pyspark.ml.classification import NaiveBayesModel
+from pyspark.ml.feature import Tokenizer, StopWordsRemover, HashingTF, IDF, StringIndexer
+from pyspark.sql.functions import length
+from pyspark.ml.feature import VectorAssembler
+from pyspark.ml.linalg import Vector
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['DEBUG'] = True
 
-def load_model():
-    global model
-    global graph
-    model = keras.models.load_model("mnist_trained.h5")
-    graph = K.get_session().graph
+model = NaiveBayesModel.load('models/naivebayes.h5')
 
-load_model()
+def pipeline(df):
+    print(df.head())
+    df = df.withColumn("length", length(df['Speech']))
+    # Create the data processing pipeline functions here (note: StringIndexer will be used to encode 
+    # your target variable column. This column should be named 'label' so our model will recognize it later)
+    review_data = Tokenizer(inputCol="Speech", outputCol="Words")
+    reviewed = review_data.transform(df)
+    #reviewed.show()
+    remover = StopWordsRemover(inputCol="Words", outputCol="filtered")
+    newFrame = remover.transform(reviewed)
+    #newFrame.show()
+    hashing = HashingTF(inputCol="filtered", outputCol="hashedValues", numFeatures=pow(2,10))
+    # Transform in a DF
+    hashed_df = hashing.transform(newFrame)
+    hashed_df.show(truncate=False)
+    idf = IDF(inputCol="hashedValues", outputCol="feature")
+    idfModel = idf.fit(hashed_df)
+    rescaledData = idfModel.transform(hashed_df)
+    rescaledData.select("words", "feature").show(truncate=False)
+    # indexer = StringIndexer(inputCol="Party_Affliation", outputCol="label")
+    
+    # indexed = indexer.fit(rescaledData).transform(rescaledData)
+    
+    assembler = VectorAssembler(
+    inputCols=["feature", "length"],
+    outputCol="features")
+
+    return assembler.transform(rescaledData)
+
 
 def clean_user_input(files):  
     with open(files) as file:
@@ -99,18 +128,19 @@ def element_correlation():
             # Save the file to the uploads folder
             file.save(filepath)
             clean_user_input(filepath)
+            cleaned = pipeline(spark.read.format("csv").option("header", "true").load("speech.csv"))
+
 
             # use model to clean up 'speech.csv' i.e. cleaned = (cleaned csv)
 
-            # global graph
-            # with graph.as_default():
+            # Use the model to make a prediction
+            predictions = model.transform(cleaned)
 
-            #     # Use the model to make a prediction
-            #     prediction_digit = model.predict_classes(cleaned)
-            #     data["prediction"] = str(prediction)
+            data["predictions"] = str(predictions.select('prediction').collect()[0])
+            data['predictions'] = 'Democrat' if data['predictions'] == 'Row(prediction=1.0)' else 'Republican'
 
-            #     # indicate that the request was a success
-            #     data["success"] = True
+            # indicate that the request was a success
+            data["success"] = True
 
             return jsonify(data)
 
