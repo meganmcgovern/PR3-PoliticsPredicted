@@ -1,12 +1,34 @@
+.text-block {
+  position: absolute;
+  left: 250px;
+  top: 250px;
+  background-color:rgb(147, 152, 221);
+  color: rgb(10, 10, 10);
+  padding-left: 20px;
+  padding-right: 20px;
+  z-index: 1;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.container {
+  position: relative;
+  top: 0%; 
+  left: 0%; 
+  width: 100%; 
+  height: 125%;
+
+}
+
 #bg {
     position: fixed; 
     top: -50%; 
     left: -50%; 
     width: 200%; 
     height: 200%;
+    z-index: -1;
   }
   #bg img {
-    position: absolute; 
+    position: relative; 
     top: 0; 
     left: 0; 
     right: 0; 
@@ -14,6 +36,7 @@
     margin: auto; 
     min-width: 50%;
     min-height: 50%;
+    z-index: -1;
   }
   
   @media screen and (max-width: 1024px) { /* Specific to this particular image */
@@ -36,7 +59,7 @@
 }
 
 .navbar-default {
-  background-color:rgb(178, 182, 240);
+  background-color:rgb(147, 152, 221);
   background-image: none;
   background-repeat: no-repeat;
  }
