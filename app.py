@@ -142,13 +142,11 @@ def element_correlation():
             # indicate that the request was a success
             data["success"] = True
 
-            return jsonify(data)
+            return render_template('response.html', data=data)
 
     return render_template("party-prediction-input.html")
 
-# @app.route("/twitter")
-# def timeseries():
-#     return render_template("twitter.html")
+
 
 
 if __name__ == "__main__":
