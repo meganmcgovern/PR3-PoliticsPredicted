@@ -109,7 +109,7 @@ def clean_user_input(files):
 def index():
     return render_template("index.html")
 
-@app.route("/party-prediction", methods=['GET', 'POST'])
+@app.route("/party-prediction-input", methods=['GET', 'POST'])
 def element_correlation():
     data = {"success": False}
     if request.method == 'POST':
@@ -144,11 +144,11 @@ def element_correlation():
 
             return jsonify(data)
 
-    return render_template("party-prediction.html")
+    return render_template("party-prediction-input.html")
 
-@app.route("/twitter")
-def timeseries():
-    return render_template("twitter.html")
+# @app.route("/twitter")
+# def timeseries():
+#     return render_template("twitter.html")
 
 
 if __name__ == "__main__":
